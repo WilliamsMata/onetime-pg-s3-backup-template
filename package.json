@@ -5,17 +5,22 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "cross-env NODE_ENV=${NODE_ENV:-development} dotenv-flow -- tsx src/index.ts"
   },
   "author": "Faraz Patankar",
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^16.9.1",
-    "typescript": "^4.4.2"
+    "typescript": "^4.4.2",
+    "cross-env": "^7.0.3",
+    "dotenv-cli": "^7.2.1",
+    "dotenv-flow-cli": "^1.0.0"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.162.0",
-    "envsafe": "^2.0.3"
+    "envsafe": "^2.0.3",
+    "tsx": "^3.12.7"
   },
   "keywords": [],
   "prettier": {
