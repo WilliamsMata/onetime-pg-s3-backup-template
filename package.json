@@ -17,5 +17,8 @@
     "@aws-sdk/client-s3": "^3.162.0",
     "envsafe": "^2.0.3"
   },
-  "keywords": []
+  "keywords": [],
+  "prettier": {
+    "semi": true
+  }
 }
