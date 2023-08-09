@@ -11,6 +11,6 @@ const tryBackup = async () => {
   }
 }
 
-if (env.RUN_ON_STARTUP) {
+if (env.BACKUP_DATABASE_URL) {
   tryBackup()
 }
