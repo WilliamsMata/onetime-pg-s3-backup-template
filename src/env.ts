@@ -6,13 +6,14 @@ export const env = envsafe({
   AWS_S3_BUCKET: str(),
   AWS_S3_REGION: str({
     allowEmpty: true,
+    default: undefined,
   }),
   BACKUP_DATABASE_URL: str({
     desc: "The connection string of the database to backup.",
   }),
   AWS_S3_ENDPOINT: str({
     desc: "The S3 custom endpoint you want to use.",
-    default: "",
+    default: undefined,
     allowEmpty: true,
   }),
 })
