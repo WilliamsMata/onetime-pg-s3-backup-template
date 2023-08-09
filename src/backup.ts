@@ -13,7 +13,7 @@ const uploadToS3 = async ({ name, path }: { name: string; path: string }) => {
     region:
       env.AWS_S3_REGION && env.AWS_S3_REGION !== ""
         ? env.AWS_S3_REGION
-        : undefined,
+        : 'auto',
   };
 
   if (env.AWS_S3_ENDPOINT && env.AWS_S3_ENDPOINT !== "") {
