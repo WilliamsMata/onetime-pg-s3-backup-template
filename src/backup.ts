@@ -13,7 +13,7 @@ const uploadToS3 = async ({ name, path }: { name: string; path: string }) => {
     region:
       env.AWS_S3_REGION && env.AWS_S3_REGION !== ""
         ? env.AWS_S3_REGION
-        : 'auto',
+        : "auto",
   };
 
   if (env.AWS_S3_ENDPOINT && env.AWS_S3_ENDPOINT !== "") {
@@ -38,8 +38,10 @@ const dumpToFile = async (path: string) => {
   console.log("Dumping DB to file...");
 
   await new Promise((resolve, reject) => {
+    // CAMBIO CLAVE AQUÍ: Usamos -F c (formato custom) que es más robusto.
+    // Ya no necesitamos gzip porque -Fc está comprimido por defecto.
     exec(
-      `pg_dump ${env.BACKUP_DATABASE_URL} -F t | gzip > ${path}`,
+      `pg_dump "${env.BACKUP_DATABASE_URL}" -F c > ${path}`,
       (error, stdout, stderr) => {
         if (error) {
           reject({ error: JSON.stringify(error), stderr });
@@ -54,14 +56,17 @@ const dumpToFile = async (path: string) => {
   console.log("DB dumped to file...");
 };
 
-const deleteFile = async (path: string) => {
-  console.log("Deleting file...");
-  await new Promise((resolve, reject) => {
+const deleteFile = (path: string) => {
+  // Pequeña corrección en la lógica de unlink para evitar errores
+  return new Promise<void>((resolve) => {
     unlink(path, (err) => {
-      reject({ error: JSON.stringify(err) });
-      return;
+      if (err) {
+        console.error("Failed to delete temporary file:", err);
+      } else {
+        console.log("Temporary file deleted.");
+      }
+      resolve();
     });
-    resolve(undefined);
   });
 };
 
@@ -70,7 +75,8 @@ export const backup = async () => {
 
   let date = new Date().toISOString();
   const timestamp = date.replace(/[:.]+/g, "-");
-  const filename = `backup-${timestamp}.tar.gz`;
+
+  const filename = `backup-${timestamp}.dump`;
   const filepath = `/tmp/${filename}`;
 
   await dumpToFile(filepath);
