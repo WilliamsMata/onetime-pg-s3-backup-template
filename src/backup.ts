@@ -38,8 +38,6 @@ const dumpToFile = async (path: string) => {
   console.log("Dumping DB to file...");
 
   await new Promise((resolve, reject) => {
-    // CAMBIO CLAVE AQUÍ: Usamos -F c (formato custom) que es más robusto.
-    // Ya no necesitamos gzip porque -Fc está comprimido por defecto.
     exec(
       `pg_dump "${env.BACKUP_DATABASE_URL}" -F c > ${path}`,
       (error, stdout, stderr) => {
